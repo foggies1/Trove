@@ -1,0 +1,4 @@
+name: Trove
+version: '${project.version}'
+main: net.foggies.trove.Trove
+api-version: 1.17
