@@ -1,6 +1,6 @@
 package net.foggies.trove.impl.uber.worlds;
 
-import net.foggies.trove.api.BossType;
+import net.foggies.trove.api.UberType;
 import net.foggies.trove.api.TroveWorld;
 import net.foggies.trove.utils.Cuboid;
 import org.bukkit.Bukkit;
@@ -20,7 +20,7 @@ public class UberOneWorld extends TroveWorld {
                         new Location(WORLD, -56, 77, -60),
                         new Location(WORLD, 56, 66, 59)
                 ),
-                BossType.UBER_ONE
+                UberType.UBER_NINE
         );
     }
 

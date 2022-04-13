@@ -1,7 +1,7 @@
 package net.foggies.trove.impl.player.registry;
 
 import net.foggies.trove.Trove;
-import net.foggies.trove.impl.player.Trovian;
+import net.foggies.trove.impl.player.trovian.Trovian;
 
 import java.util.Map;
 import java.util.UUID;

@@ -1,17 +1,21 @@
 package net.foggies.trove.impl.player.events;
 
 import net.foggies.trove.Trove;
-import net.foggies.trove.impl.player.DustData;
-import net.foggies.trove.impl.player.Trovian;
-import net.foggies.trove.impl.player.TrovianStat;
-import net.foggies.trove.impl.player.TrovianStats;
-import net.foggies.trove.impl.player.gems.Gem;
-import net.foggies.trove.impl.player.gems.GemData;
-import net.foggies.trove.impl.player.gems.GemRarity;
+import net.foggies.trove.api.UberType;
+import net.foggies.trove.impl.player.trovian.TrovianHealth;
+import net.foggies.trove.impl.player.boxes.GemBox;
+import net.foggies.trove.impl.player.boxes.WeaponBox;
+import net.foggies.trove.impl.player.gems.constant.GemRarity;
+import net.foggies.trove.impl.player.gems.obj.Gem;
+import net.foggies.trove.impl.player.gems.obj.GemData;
 import net.foggies.trove.impl.player.registry.TrovianRegistry;
 import net.foggies.trove.impl.player.skills.Skill;
 import net.foggies.trove.impl.player.skills.SkillData;
 import net.foggies.trove.impl.player.skills.SkillType;
+import net.foggies.trove.impl.player.trovian.DustData;
+import net.foggies.trove.impl.player.trovian.Trovian;
+import net.foggies.trove.impl.player.trovian.TrovianStat;
+import net.foggies.trove.impl.player.trovian.TrovianStats;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -39,10 +43,10 @@ public class PlayerJoinQuitListener implements Listener {
         Player player = e.getPlayer();
 
         Map<SkillType, Skill> skillTypeSkillMap = new ConcurrentHashMap<>();
-        skillTypeSkillMap.put(SkillType.COMBAT, new Skill(SkillType.COMBAT, 10000, 1.0D));
-        skillTypeSkillMap.put(SkillType.MINING, new Skill(SkillType.MINING, 10000, 1.0D));
-        skillTypeSkillMap.put(SkillType.TREE_CHOPPING, new Skill(SkillType.TREE_CHOPPING, 10000, 1.0D));
-        skillTypeSkillMap.put(SkillType.FARMING, new Skill(SkillType.FARMING, 10000, 1.0D));
+        skillTypeSkillMap.put(SkillType.COMBAT, new Skill(SkillType.COMBAT, 1, 1.0D));
+        skillTypeSkillMap.put(SkillType.MINING, new Skill(SkillType.MINING, 1, 1.0D));
+        skillTypeSkillMap.put(SkillType.TREE_CHOPPING, new Skill(SkillType.TREE_CHOPPING, 1, 1.0D));
+        skillTypeSkillMap.put(SkillType.FARMING, new Skill(SkillType.FARMING, 1, 1.0D));
 
         List<Gem> gemList = new ArrayList<>();
         Gem gem = plugin.getGemFactory().makeGem(GemRarity.COMMON);
@@ -52,13 +56,11 @@ public class PlayerJoinQuitListener implements Listener {
         gemList.add(gem2);
         gemList.add(gem3);
 
-        player.getInventory().addItem(plugin.getGemFactory().getGemBoxFactory().makeBox(GemRarity.COMMON));
-        player.getInventory().addItem(plugin.getGemFactory().getGemBoxFactory().makeBox(GemRarity.SHADOW));
-        player.getInventory().addItem(plugin.getGemFactory().getGemBoxFactory().makeBox(GemRarity.STELLAR));
-        player.getInventory().addItem(plugin.getGemFactory().getGemBoxFactory().makeBox(GemRarity.RADIANT));
-        player.getInventory().addItem(plugin.getGemFactory().getGemBoxFactory().makeBox(GemRarity.RARE));
-        player.getInventory().addItem(plugin.getGemFactory().getGemBoxFactory().makeBox(GemRarity.RELIC));
-        player.getInventory().addItem(plugin.getGemFactory().getGemBoxFactory().makeBox(GemRarity.LEGENDARY));
+        player.getInventory().addItem(((GemBox) plugin.getBoxRegistry().getBox("gem_box")).makeBox(GemRarity.COMMON));
+        player.getInventory().addItem(((GemBox) plugin.getBoxRegistry().getBox("gem_box")).makeBox(GemRarity.RADIANT));
+        player.getInventory().addItem(((GemBox) plugin.getBoxRegistry().getBox("gem_box")).makeBox(GemRarity.RARE));
+        player.getInventory().addItem(((GemBox) plugin.getBoxRegistry().getBox("gem_box")).makeBox(GemRarity.RELIC));
+        player.getInventory().addItem(((WeaponBox) plugin.getBoxRegistry().getBox("weapon_box")).makeBox(UberType.UBER_ONE));
 
         this.registry.add(
                 new Trovian(
@@ -69,11 +71,14 @@ public class PlayerJoinQuitListener implements Listener {
                                 new TrovianStat(1.0D),
                                 new TrovianStat(1.0D)
                         ),
+                        new TrovianHealth(10000.0D, 10000.0D),
                         new GemData(gemList),
                         new DustData(1000000, 1000000, 100000, 100000)
 
                 )
         );
+
+
     }
 
     @EventHandler

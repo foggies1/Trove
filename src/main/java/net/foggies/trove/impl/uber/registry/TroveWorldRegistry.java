@@ -28,6 +28,10 @@ public class TroveWorldRegistry {
         return this.worldMap.get(world);
     }
 
+    public boolean isTroveWorld(String world){
+        return this.worldMap.containsKey(world);
+    }
+
     public void loadMaps(){
         this.worldMap.put("UberOne", new UberOneWorld());
         this.worldMap.put("UberTwo", new UberTwoWorld());

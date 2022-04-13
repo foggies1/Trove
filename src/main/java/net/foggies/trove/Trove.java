@@ -3,14 +3,20 @@ package net.foggies.trove;
 import lombok.Getter;
 import me.lucko.helper.plugin.ExtendedJavaPlugin;
 import net.foggies.trove.api.TroveWorld;
-import net.foggies.trove.impl.boss.BossDamageEvent;
-import net.foggies.trove.impl.boss.BossSpawnCommand;
-import net.foggies.trove.impl.player.events.GemApplyEvent;
+import net.foggies.trove.api.command.ICommand;
+import net.foggies.trove.impl.player.boxes.BoxRegistry;
+import net.foggies.trove.impl.player.events.BoxOpenEvent;
+import net.foggies.trove.impl.player.events.GemEvent;
 import net.foggies.trove.impl.player.events.PlayerJoinQuitListener;
-import net.foggies.trove.impl.player.gems.GemFactory;
-import net.foggies.trove.impl.player.gems.GemShopUICommand;
-import net.foggies.trove.impl.player.gems.GemUICommand;
+import net.foggies.trove.impl.player.gems.commands.GemBoxCommand;
+import net.foggies.trove.impl.player.gems.commands.GemShopUICommand;
+import net.foggies.trove.impl.player.gems.commands.GemUICommand;
+import net.foggies.trove.impl.player.gems.factory.GemFactory;
 import net.foggies.trove.impl.player.registry.TrovianRegistry;
+import net.foggies.trove.impl.player.weapon.WeaponRegistry;
+import net.foggies.trove.impl.player.weapon.commands.WeaponBoxCommand;
+import net.foggies.trove.impl.uber.boss.BossDamageEvent;
+import net.foggies.trove.impl.uber.boss.BossSpawnCommand;
 import net.foggies.trove.impl.uber.registry.TroveWorldRegistry;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.event.Listener;
@@ -24,8 +30,11 @@ public final class Trove extends ExtendedJavaPlugin {
     private static Trove plugin;
     private TrovianRegistry trovianRegistry;
     private TroveWorldRegistry uberRegistry;
+    private WeaponRegistry weaponRegistry;
+    private BoxRegistry boxRegistry;
     private Economy economy;
     private GemFactory gemFactory;
+
 
     @Override
     public void enable() {
@@ -40,12 +49,20 @@ public final class Trove extends ExtendedJavaPlugin {
 
         this.uberRegistry = new TroveWorldRegistry(this);
         this.trovianRegistry = new TrovianRegistry(this);
+        this.weaponRegistry = new WeaponRegistry(this);
         this.gemFactory = new GemFactory(this);
+        this.boxRegistry = new BoxRegistry(this);
 
-        registerListeners(new BossDamageEvent(this), new PlayerJoinQuitListener(this), new GemApplyEvent(this));
+        registerListeners(new BoxOpenEvent(this), new BossDamageEvent(this), new PlayerJoinQuitListener(this), new GemEvent(this));
         new BossSpawnCommand(this);
         new GemUICommand(this);
         new GemShopUICommand(this);
+
+        ICommand gemBoxCommand = new GemBoxCommand(this);
+        getCommand(gemBoxCommand.getCommand()).setExecutor(gemBoxCommand);
+
+        ICommand weaponBoxCommand = new WeaponBoxCommand(this);
+        getCommand(weaponBoxCommand.getCommand()).setExecutor(weaponBoxCommand);
 
     }
 

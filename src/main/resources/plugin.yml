@@ -2,3 +2,8 @@ name: Trove
 version: '${project.version}'
 main: net.foggies.trove.Trove
 api-version: 1.17
+commands:
+  gembox:
+    description: "Help Command"
+  weaponbox:
+    description: "Help Command"

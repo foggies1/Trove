@@ -1,6 +1,6 @@
 package net.foggies.trove.api;
 
-import net.foggies.trove.impl.player.Trovian;
+import net.foggies.trove.impl.player.trovian.Trovian;
 
 import java.io.Serializable;
 

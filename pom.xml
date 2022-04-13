@@ -12,7 +12,7 @@
     <name>Trove</name>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>16</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -65,6 +65,10 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -100,6 +104,18 @@
             <artifactId>FastAsyncWorldEdit-Core</artifactId>
             <version>2.1.1</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.mojang</groupId>
+            <artifactId>brigadier</artifactId>
+            <version>1.0.18</version>
+        </dependency>
+        <dependency>
+            <groupId>spigot-1.17.1</groupId>
+            <artifactId>spigot-1.17.1</artifactId>
+            <scope>system</scope>
+            <version>1.0</version>
+            <systemPath>${basedir}/libs/spigot-1.17.1.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

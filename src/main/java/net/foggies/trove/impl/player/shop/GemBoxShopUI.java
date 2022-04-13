@@ -6,27 +6,29 @@ import me.lucko.helper.menu.scheme.MenuPopulator;
 import me.lucko.helper.menu.scheme.MenuScheme;
 import me.lucko.helper.utils.Players;
 import net.foggies.trove.Trove;
-import net.foggies.trove.impl.player.gems.GemBoxFactory;
-import net.foggies.trove.impl.player.gems.GemRarity;
+import net.foggies.trove.impl.player.boxes.BoxRegistry;
+import net.foggies.trove.impl.player.boxes.GemBox;
+import net.foggies.trove.impl.player.gems.constant.GemRarity;
 import net.foggies.trove.utils.Number;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 public class GemBoxShopUI extends Gui {
 
     private final Trove plugin;
     private final Economy economy;
-    private final GemBoxFactory gemBoxFactory;
+    private final BoxRegistry boxRegistry;
 
     public GemBoxShopUI(Player player, Trove plugin) {
         super(player, 5, "&aGem Box Store");
         this.plugin = plugin;
         this.economy = plugin.getEconomy();
-        this.gemBoxFactory = plugin.getGemFactory().getGemBoxFactory();
+        this.boxRegistry = plugin.getBoxRegistry();
     }
 
     private static final MenuScheme OUTLINE = new MenuScheme()
@@ -68,7 +70,12 @@ public class GemBoxShopUI extends Gui {
                                     return;
                                 }
 
-                                player.getInventory().addItem(gemBoxFactory.makeBox(rarity));
+                                try {
+                                    player.getInventory().addItem(((GemBox) this.boxRegistry.getBox("gem_box")).makeBox(rarity));
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
                                 this.economy.withdrawPlayer(player, rarity.getBoxCost());
                                 Players.msg(player, "&aYou've successfully purchased a " + rarity.getDisplayName() + " Box&a.");
                             })

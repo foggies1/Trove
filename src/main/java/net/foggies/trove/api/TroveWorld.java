@@ -20,10 +20,10 @@ public abstract class TroveWorld {
     private String worldIdentifier;
     private World bukkitWorld;
     private Cuboid region;
-    private BossType bossType;
+    private UberType bossType;
     private Map<UUID, TroveBoss> bossMap;
 
-    public TroveWorld(String worldIdentifier, World bukkitWorld, Cuboid region, BossType bossType) {
+    public TroveWorld(String worldIdentifier, World bukkitWorld, Cuboid region, UberType bossType) {
         this.worldIdentifier = worldIdentifier;
         this.bukkitWorld = bukkitWorld;
         this.region = region;

@@ -4,12 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import net.foggies.trove.Trove;
-import net.foggies.trove.impl.boss.data.BossHealth;
-import net.foggies.trove.impl.boss.data.BossInfo;
+import net.foggies.trove.impl.uber.boss.data.BossHealth;
+import net.foggies.trove.impl.uber.boss.data.BossInfo;
+import net.foggies.trove.utils.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Zombie;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -43,12 +45,15 @@ public abstract class TroveBoss {
     }
 
     public void updateName(Entity entity) {
-        entity.setCustomName(this.name + " (" + this.bossHealth.prettified() + ")");
+        entity.setCustomName(StringUtils.color(this.name + " (" + this.bossHealth.prettified() + ")"));
     }
 
     public Entity loadEntity(Location location) {
 
         Entity entity = location.getWorld().spawnEntity(location, this.entityType);
+
+        if(entity instanceof Zombie zombie) zombie.setAdult();
+
         entity.setCustomNameVisible(true);
         entity.getPersistentDataContainer().set(
                 new NamespacedKey(Trove.getPlugin(), "boss"),
